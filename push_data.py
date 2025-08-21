@@ -47,9 +47,10 @@ class NetworkDataExtract():
             return(len(self.records))
         except Exception as e:
             raise NetworkSecurityException(e,sys)
-        
+
+#Execution of etl pipeline
 if __name__ == '__main__':
-    FILE_PATH = "Network_Data\Phising_Testing_Dataset.csv"
+    FILE_PATH = "Network_Data\Phising_Testing_Data.csv"
     DATABASE = "network_security"
     Collection = "NetworkData"
     networkobj = NetworkDataExtract()
@@ -57,4 +58,3 @@ if __name__ == '__main__':
     print(records)
     no_of_records = networkobj.insert_data_mongodb(records, DATABASE, Collection)
     print(no_of_records)
-    

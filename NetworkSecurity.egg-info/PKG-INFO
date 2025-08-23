@@ -5,10 +5,11 @@ Author: Ayush Khandelwal
 Author-email: ayush28khandewal@gmail.com
 Requires-Dist: python-dotenv
 Requires-Dist: pandas
-Requires-Dist: numpy
 Requires-Dist: pymongo
+Requires-Dist: numpy
 Requires-Dist: certifi
 Requires-Dist: pymongo[srv]>=4.0
+Requires-Dist: scikit-learn
 Dynamic: author
 Dynamic: author-email
 Dynamic: requires-dist

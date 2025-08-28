@@ -1,5 +1,6 @@
 import os
 import sys
+import joblib
 
 from networksecurity.exception.exception import NetworkSecurityException 
 from networksecurity.logging.logger import logging
@@ -27,6 +28,9 @@ from sklearn.ensemble import (
 
 import mlflow
 
+import dagshub
+dagshub.init(repo_owner='ayush2888', repo_name='Network_Security', mlflow=True)
+
 
 
 
@@ -38,20 +42,30 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-    def track_mlflow(self,best_model,classificationmetric):
-        
-        with mlflow.start_run():
-            f1_score=classificationmetric.f1_score
-            precision_score=classificationmetric.precision_score
-            recall_score=classificationmetric.recall_score
-
-            
-
-            mlflow.log_metric("f1_score",f1_score)
-            mlflow.log_metric("precision",precision_score)
-            mlflow.log_metric("recall_score",recall_score)
-            mlflow.sklearn.log_model(best_model,"model")
    
+
+    def track_mlflow(self, best_model, classificationmetric):
+      with mlflow.start_run():
+        f1_score = classificationmetric.f1_score
+        precision_score = classificationmetric.precision_score
+        recall_score = classificationmetric.recall_score
+
+        # log metrics
+        mlflow.log_metric("f1_score", f1_score)
+        mlflow.log_metric("precision", precision_score)
+        mlflow.log_metric("recall_score", recall_score)
+
+        #  Save model locally
+        model_dir = "artifacts/model"
+        os.makedirs(model_dir, exist_ok=True)
+        model_path = os.path.join(model_dir, "model.pkl")
+        joblib.dump(best_model, model_path)
+
+        # Log model file as generic artifact (working with DagsHub)
+        mlflow.log_artifact(model_path, artifact_path="model")
+
+        print(" Metrics & model logged successfully (model.pkl stored as artifact)")
+
 
 
         
@@ -102,8 +116,8 @@ class ModelTrainer:
             list(model_report.values()).index(best_model_score)
         ]
         best_model = models[best_model_name]
+        
         y_train_pred=best_model.predict(X_train)
-
         classification_train_metric=get_classification_score(y_true=y_train,y_pred=y_train_pred)
         
         ## Tracking the experiements with mlflow
@@ -124,7 +138,7 @@ class ModelTrainer:
         save_object(self.model_trainer_config.trained_model_file_path,obj=NetworkModel)
         
         #model pusher
-        # save_object("final_model/model.pkl",best_model)
+        save_object("final_model/model.pkl",best_model)
         
 
         ## Model Trainer Artifact

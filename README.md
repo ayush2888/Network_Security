@@ -30,19 +30,19 @@ Compatible with AWS S3 sync for artifacts and trained models.
 
 The model uses 30+ features that capture URL characteristics, domain properties, web page elements, and traffic metrics, including:
 
-URL & Domain Features:
+1) URL & Domain Features:
 having_IP_Address, URL_Length, Shortining_Service, having_At_Symbol, double_slash_redirecting, Prefix_Suffix, having_Sub_Domain, SSLfinal_State, Domain_registeration_length
 
-Web Page & Link Features:
+2) Web Page & Link Features:
 Favicon, port, HTTPS_token, Request_URL, URL_of_Anchor, Links_in_tags, SFH, Submitting_to_email, Abnormal_URL, Redirect, on_mouseover, RightClick, popUpWidnow, Iframe
 
-Domain & Traffic Metrics:
+3) Domain & Traffic Metrics:
 age_of_domain, DNSRecord, web_traffic, Page_Rank, Google_Index, Links_pointing_to_page
 
-Statistical Report:
+4) Statistical Report:
 Statistical_report
 
-The target column is:
+5) The target column is:
 class (1 = Legitimate, -1 = Phishing)
 
 This comprehensive set of features allows the model to accurately classify phishing attempts based on structural, content-based, and behavioral characteristics of websites.
